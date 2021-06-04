@@ -1,15 +1,28 @@
 <?php
-if($_POST['name'] === ''){
-	$error['name'] = 'blank';
+session_start();
+
+if(!empty($_POST)){
+	if($_POST['name'] === ''){
+		$error['name'] = 'blank';
+	}
+	if($_POST['email'] === ''){
+		$error['email'] = 'blank';
+	}
+	if(strlen($_POST['password']) < 6){
+		$error['password'] = 'length';
+	}
+	if($_POST['password'] === ''){
+		$error['password'] = 'blank';
+	}
+	if(empty($error)){
+		$_SESSION['join'] = $_POST;
+		header('Location: check.php');
+		exit();
+	}
 }
-if($_POST['email'] === ''){
-	$error['email'] = 'blank';
-}
-if(strlen($_POST['password']) < 6){
-	$error['password'] = 'length';
-}
-if($_POST['password'] === ''){
-	$error['password'] = 'blank';
+
+if($_REQUEST['action'] == 'rewrite' && isset($_SESSION['join'])){
+	$_POST = $_SESSION['join'];
 }
 ?>
 <!DOCTYPE html>
@@ -52,7 +65,7 @@ if($_POST['password'] === ''){
         	<input type="password" name="password" size="10" maxlength="20" 
 			value="<?php print(htmlspecialchars($_POST['password'], ENT_QUOTES)); ?>" />
 			<?php if($error['password'] === 'length'): ?>
-			<p class="error">* パスワードは6文字以上で入力してください</p>
+			<p class="error">* パスワードを6文字以上で入力してください</p>
 			<?php endif; ?>
 			<?php if($error['password'] === 'blank'): ?>
 			<p class="error">* パスワードを入力してください</p>
