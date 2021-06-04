@@ -2,6 +2,7 @@
 session_start();
 require('../dbconnect.php');
 
+//登録ボタンが押された場合に以下のバリデーションを実行
 if(!empty($_POST)){
 	if($_POST['name'] === ''){
 		$error['name'] = 'blank';
@@ -34,7 +35,7 @@ if(!empty($_POST)){
 		}
 	}
 
-	//画像の登録
+	//上記のバリデーションが解消されていれば画像を登録してcheck.phpに遷移
 	if(empty($error)){
 		$image = date('YmdHis') . $_FILES['image']['name'];
 		move_uploaded_file($_FILES['image']['tmp_name'],
@@ -46,6 +47,7 @@ if(!empty($_POST)){
 	}
 }
 
+//check.phpで「書き直す」ボタンが押された場合すでに入力した内容は保持
 if($_REQUEST['action'] == 'rewrite'){
 	$_POST = $_SESSION['join'];
 }
